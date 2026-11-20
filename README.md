@@ -1009,11 +1009,23 @@ Export / Publish
 This project was developed collaboratively by:
 
 | Contributor | Role / Contribution |
+
+
 | ANKUSH | FRONTEND |
+
+
 | TINA   | BACKEND AND API , AI AGENTS AND RETRIEVAL|
+
+
 | ADITYA |  AI AGENTS |
+
+
 | PRUTHVI | ARCHITECTURE |
+
+
 | NITANT | DEPLOYMENT  |
+
+
 | VRUSHABH | QA AND TESTING|
 
 
