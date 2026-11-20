@@ -1092,4 +1092,6 @@ This project was developed collaboratively by:
 | VRUSHABH | QA AND TESTING|
 
 
-All contributors participated collaboratively in the development, testing, documentation, and refinement of the project.
+All contributors participated collaboratively in the development, testing, documentation, and refinement of the project
+And also performed Qulity Assurance And different type of testing to make sure that our AI workflow, APIs, document 
+processing pipeline and overall (0:10) system are working correctly
