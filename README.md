@@ -190,7 +190,8 @@ New Firebase users receive the default `writer` role. Elevated roles are managed
 
 #  Document Processing
 
-<img width="1000" height="524" alt="Document Processing Pipeline" src="https://github.com/user-attachments/assets/3491c526-708c-463e-af16-5c48dfb6cc44" />
+<img width="1528" height="1029" alt="Document Processing Ingestion Pipeline" src="https://github.com/user-attachments/assets/88e0090c-8613-4f21-b32a-750b3642f77e" />
+
 
 
 
