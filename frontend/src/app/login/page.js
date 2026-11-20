@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiEye, FiEyeOff, FiFileText, FiZap, FiShield, FiHome, FiArrowRight } from "react-icons/fi";
-import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth, googleProvider } from "../../../firebase";
 import { ensureUserProfile } from "@/lib/firebase/users";
 import { useAuth } from "@/hooks/useAuth";
@@ -25,6 +25,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [resetting, setResetting] = useState(false);
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -33,8 +35,6 @@ export default function LoginPage() {
   }, [authLoading, user, router]);
 
   async function completeSignIn(credential) {
-    const token = await credential.user.getIdToken();
-    console.log("Firebase ID Token:", token);
     await ensureUserProfile(credential.user);
     router.push("/dashboard");
   }
@@ -52,8 +52,34 @@ export default function LoginPage() {
     }
   }
 
+  async function handleForgotPassword() {
+    setError("");
+    setNotice("");
+    const address = email.trim();
+    if (!address) {
+      setError("Enter your email address above, then click Forgot password? again.");
+      return;
+    }
+    setResetting(true);
+    try {
+      await sendPasswordResetEmail(auth, address);
+      setNotice(`If an account exists for ${address}, a password reset link has been sent. Check your inbox and spam folder.`);
+    } catch (err) {
+      if (err?.code === "auth/invalid-email") {
+        setError("That email address doesn't look valid.");
+      } else if (err?.code === "auth/too-many-requests") {
+        setError("Too many attempts. Please wait a few minutes and try again.");
+      } else {
+        setError(err?.message || "Could not send the reset email.");
+      }
+    } finally {
+      setResetting(false);
+    }
+  }
+
   async function handleEmailLogin() {
     setError("");
+    setNotice("");
     if (!email || !password) {
       setError("Please enter email and password");
       return;
@@ -115,8 +141,13 @@ export default function LoginPage() {
                 <label htmlFor="password" className="field-label mb-0">
                   Password
                 </label>
-                <button type="button" className="link cursor-pointer text-[13px]">
-                  Forgot password?
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  disabled={resetting}
+                  className="link cursor-pointer text-[13px] disabled:cursor-wait disabled:opacity-60"
+                >
+                  {resetting ? "Sending..." : "Forgot password?"}
                 </button>
               </div>
               <div className="relative">
@@ -143,6 +174,12 @@ export default function LoginPage() {
           {error && (
             <div role="alert" className="alert alert-danger mt-5">
               {error}
+            </div>
+          )}
+
+          {notice && (
+            <div role="status" className="alert alert-success mt-5">
+              {notice}
             </div>
           )}
 

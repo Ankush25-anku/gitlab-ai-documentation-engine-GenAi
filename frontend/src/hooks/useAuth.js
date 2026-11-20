@@ -31,7 +31,6 @@ export function AuthProvider({ children }) {
 
     try {
       const token = await currentUser.getIdToken();
-      console.log("Firebase ID Token:", token);
       setIdToken(token);
       setUser(currentUser);
 
