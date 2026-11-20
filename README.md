@@ -45,7 +45,7 @@ The GitLab AI Content & Documentation Engine is designed to automate technical d
 
 Instead of directly sending raw project information to an AI model, the system processes uploaded source material, extracts relevant context, generates documentation through specialized stages, performs technical review, optimizes the tone, and finally sends the result through a human approval workflow.
 
-### High-Level Flow
+### High Level Flow
 
 
 <img width="1312" height="1199" alt="image" src="https://github.com/user-attachments/assets/d72f9415-325a-4f2c-b655-b102275fcac0" />
