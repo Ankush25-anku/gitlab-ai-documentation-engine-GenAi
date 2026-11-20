@@ -48,7 +48,8 @@ Instead of directly sending raw project information to an AI model, the system p
 ### High-Level Flow
 
 
-<img width="1312" height="1199" alt="AI Documentation Workflow Loop" src="https://github.com/user-attachments/assets/a6d79d8b-e2ad-40c2-baf6-c1d785a1d808" />
+<img width="1312" height="1199" alt="image" src="https://github.com/user-attachments/assets/d72f9415-325a-4f2c-b655-b102275fcac0" />
+
 
 
 
@@ -263,7 +264,68 @@ PDF source markers can preserve the original filename and page number.
 
 #  AI Workflow
 
-<img width="1000" height="700" alt="AI Workflow_ From Upload to Export" src="https://github.com/user-attachments/assets/bcfa810e-630f-4123-ab2a-1d2aea9420a8" />
+```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    background: "#0F172A"
+    primaryColor: "#1E293B"
+    primaryTextColor: "#F8FAFC"
+    primaryBorderColor: "#38BDF8"
+    lineColor: "#64748B"
+    secondaryColor: "#162032"
+    tertiaryColor: "#1E293B"
+---
+flowchart TD
+    HEADER["<b>Document Processing</b><br/>Ingestion Pipeline"]
+
+    S1["<b>Uploaded File</b><br/>User uploads a document"]
+    N1["<b>Supported formats:</b><br/>PDF, DOCX, TXT,<br/>Markdown, CSV"]
+
+    S2["<b>File Validation</b><br/>Checks file type, size and format"]
+    N2["<b>Validates:</b><br/>• Supported file format<br/>• File size limits<br/>• File integrity"]
+
+    S3["<b>Document Extraction</b><br/>Extracts text content from the document"]
+    N3["<b>Handles extraction from:</b><br/>• PDFs<br/>• DOCX, TXT<br/>• Markdown, CSV"]
+
+    S4["<b>Text Normalization</b><br/>Cleans and standardizes extracted text"]
+    N4["<b>Normalization steps:</b><br/>• Remove extra spaces<br/>• Handle special characters<br/>• Standardize text format"]
+
+    S5["<b>Source Metadata</b><br/>Generates metadata about the document"]
+    N5["<b>Includes metadata such as:</b><br/>• File name<br/>• File type<br/>• Document size<br/>• Upload timestamp"]
+
+    S6["<b>Context Reader</b><br/>Prepares document context for the AI workflow"]
+    N6["<b>Uses:</b><br/>• Extracted text<br/>• Source metadata<br/>• Supporting context<br/>(e.g. templates, style guides)"]
+
+    S7["<b>AI Workflow</b><br/>Sends prepared context to the AI workflow<br/>for documentation generation"]
+
+    HEADER --> S1
+    S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7
+
+    S1 -.-> N1
+    S2 -.-> N2
+    S3 -.-> N3
+    S4 -.-> N4
+    S5 -.-> N5
+    S6 -.-> N6
+
+    style HEADER fill:#162032,stroke:#FBBF24,stroke-width:2px,color:#F8FAFC
+    style S1 fill:#1E293B,stroke:#10B981,stroke-width:2px,color:#F8FAFC
+    style S2 fill:#1E293B,stroke:#38BDF8,stroke-width:2px,color:#F8FAFC
+    style S3 fill:#1E293B,stroke:#F59E0B,stroke-width:2px,color:#F8FAFC
+    style S4 fill:#1E293B,stroke:#FB7185,stroke-width:2px,color:#F8FAFC
+    style S5 fill:#1E293B,stroke:#A78BFA,stroke-width:2px,color:#F8FAFC
+    style S6 fill:#1E293B,stroke:#2DD4BF,stroke-width:2px,color:#F8FAFC
+    style S7 fill:#1E293B,stroke:#818CF8,stroke-width:2px,color:#F8FAFC
+
+    style N1 fill:#162032,stroke:#334155,stroke-width:1px,color:#CBD5E1
+    style N2 fill:#162032,stroke:#334155,stroke-width:1px,color:#CBD5E1
+    style N3 fill:#162032,stroke:#334155,stroke-width:1px,color:#CBD5E1
+    style N4 fill:#162032,stroke:#334155,stroke-width:1px,color:#CBD5E1
+    style N5 fill:#162032,stroke:#334155,stroke-width:1px,color:#CBD5E1
+    style N6 fill:#162032,stroke:#334155,stroke-width:1px,color:#CBD5E1
+```
 
 
 ---
