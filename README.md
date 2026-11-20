@@ -19,15 +19,15 @@ https://gitlab-ai-docs-engine.vercel.app/login
 
 ###  Backend API
 
-https://gitlab-ai-content-engine-api.onrender.com
+https://content-engine-backend-7hal.onrender.com/
 
 ###  FastAPI Swagger Documentation
 
-https://gitlab-ai-content-engine-api.onrender.com/docs
+https://content-engine-backend-7hal.onrender.com/docs
 
 ### OpenAPI Specification
 
-https://gitlab-ai-content-engine-api.onrender.com/openapi.json
+https://content-engine-backend-7hal.onrender.com/openapi.json
 
 **Deployment**
 
@@ -357,11 +357,11 @@ Interactive API documentation:
 
 **Swagger UI**
 
-https://gitlab-ai-content-engine-api.onrender.com/docs
+https://content-engine-backend-7hal.onrender.com/docs
 
 **OpenAPI**
 
-https://gitlab-ai-content-engine-api.onrender.com/openapi.json
+https://generativelanguage.googleapis.com/v1beta/openai/ 
 
 ---
 
@@ -945,25 +945,31 @@ This project is intended for development, demonstration, and educational purpose
 # Screenshots
 ---
 ## 1. Home 
-<img width="1920" height="911" alt="Screenshot (819)" src="https://github.com/user-attachments/assets/2342bc82-a17e-4168-8666-7706d575e942" />
+<img width="1891" height="865" alt="Screenshot (395)" src="https://github.com/user-attachments/assets/1fcc0a97-0e87-4585-b49c-a513825518d0" />
 
 ## 2. Application Dashboard
-<img width="1600" height="950" alt="dashboard" src="https://github.com/user-attachments/assets/1494487d-aff6-49c6-b957-585d017fdcf0" />
+<img width="1896" height="863" alt="Screenshot (398)" src="https://github.com/user-attachments/assets/0f20f7e5-152c-410b-ac90-d7d7cdf0f1a9" />
 
-## Create content page
-<img width="1600" height="950" alt="create_content_page" src="https://github.com/user-attachments/assets/8810612c-da58-4680-b780-ef51f8cfb84c" />
+## 3.Create content page
+<img width="1904" height="868" alt="Screenshot (397)" src="https://github.com/user-attachments/assets/12299d80-c179-4e23-b425-96afb20cddd1" />
 
-## 3. Review page
-<img width="1600" height="950" alt="review_page" src="https://github.com/user-attachments/assets/c160aa85-2ea6-4731-88ba-05cfe1eb2ecc" />
+ ## 4. Review page
+<img width="1906" height="870" alt="Screenshot (399)" src="https://github.com/user-attachments/assets/e7c25a96-7030-41f6-b52e-4e2a5ac66ee0" />
+<img width="1904" height="864" alt="Screenshot (400)" src="https://github.com/user-attachments/assets/a4cda287-c8bb-4592-a45e-b62498256e17" />
 
-## Job Page
-<img width="1600" height="950" alt="jobs_page" src="https://github.com/user-attachments/assets/82cf30e3-2c9f-4e17-b8f0-b30500d470ac" />
 
-## Analytics Page
-<img width="1600" height="950" alt="analytics_page" src="https://github.com/user-attachments/assets/7c52573b-0c03-43e1-a727-699a666cfd66" />
+## 5. Job Page
+<img width="1894" height="854" alt="Screenshot (401)" src="https://github.com/user-attachments/assets/3494145c-3690-4101-b482-08898fa56d04" />
 
-## Role Management Page
-<img width="1600" height="950" alt="role_management_page" src="https://github.com/user-attachments/assets/1b2b9e60-be47-43f8-8794-bef75fb8dd41" />
+
+## 6. Analytics Page
+<img width="1892" height="867" alt="Screenshot (402)" src="https://github.com/user-attachments/assets/cf3cead0-e996-4176-945b-661dfea6496f" />
+
+
+## 7. Role Management Page
+<img width="1901" height="855" alt="Screenshot (403)" src="https://github.com/user-attachments/assets/2c095c79-b9b7-47c5-8f5b-6bc05dadd92e" />
+
+
 
 
 
@@ -1003,7 +1009,12 @@ Export / Publish
 This project was developed collaboratively by:
 
 | Contributor | Role / Contribution |
-|---|---|
+| ANKUSH | FRONTEND |
+| TINA   | BACKEND AND API , AI AGENTS AND RETRIEVAL|
+| ADITYA |  AI AGENTS |
+| PRUTHVI | ARCHITECTURE |
+| NITANT | DEPLOYMENT  |
+| VRUSHABH | QA AND TESTING|
 
 
 All contributors participated collaboratively in the development, testing, documentation, and refinement of the project.
