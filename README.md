@@ -385,6 +385,8 @@ For production or hosted deployments, PostgreSQL-compatible databases such as Su
 DATABASE_URL=your_postgresql_connection_string
 ```
 
+(postgresql)content_engine_user: HALMTDA20yKCrNVLNFDpfr1U7F2KmyOW@dpg-dbv8v7mtlv9c73868k9g-a.singapore-postgres.render.com/content_engine_1k89
+
 The database stores application data such as:
 
 - Users
