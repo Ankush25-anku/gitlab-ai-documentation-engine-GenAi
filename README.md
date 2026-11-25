@@ -13,6 +13,9 @@ The platform combines document ingestion, source/context normalization, a multi-
 ##  Live Demo link 
 https://gitlab-ai-docs-engine.vercel.app/login
 
+## Video Demonstration
+https://drive.google.com/file/d/1idNtXTCn-h6fHTcCuYR-jFWjjRTIxd_3/view?usp=drivesdk
+
 ### Frontend Application
 
 https://gitlab-ai-docs-engine.vercel.app/login
