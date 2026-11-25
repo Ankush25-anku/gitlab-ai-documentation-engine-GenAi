@@ -1088,7 +1088,7 @@ This project was developed collaboratively by:
 | ADITYA |  AI AGENTS |
 
 
-| PRUTHVI | ARCHITECTURE |
+| PRUTHVI | ARCHITECTURE AND DATABASE |
 
 
 | NITANT | DEPLOYMENT  |
