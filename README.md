@@ -10,11 +10,26 @@ The platform combines document ingestion, source/context normalization, a multi-
 
 ---
 
-##  Live Demo link 
-https://gitlab-ai-docs-engine.vercel.app/login
+## 🎥 Project Video Recording
 
-## Video Demonstration
-https://drive.google.com/file/d/1idNtXTCn-h6fHTcCuYR-jFWjjRTIxd_3/view?usp=drivesdk
+**▶️ [Watch the project video](https://drive.google.com/file/d/1idNtXTCn-h6fHTcCuYR-jFWjjRTIxd_3/view?usp=sharing)**
+
+## 📦 Project Artifacts
+
+| Artifact | Link |
+|---|---|
+| 🎥 Project video recording | [Watch the video](https://drive.google.com/file/d/1idNtXTCn-h6fHTcCuYR-jFWjjRTIxd_3/view?usp=sharing) |
+| 🌐 Live application (Vercel) | https://gitlab-ai-docs-engine.vercel.app/login |
+| ⚙️ Backend API (Render) | https://content-engine-backend-7hal.onrender.com |
+| 📘 Swagger API docs | https://content-engine-backend-7hal.onrender.com/docs |
+| 🧾 OpenAPI specification | https://content-engine-backend-7hal.onrender.com/openapi.json |
+| ❤️ Health check (database) | https://content-engine-backend-7hal.onrender.com/health/ready |
+| 📊 Presentation (PowerPoint) | [docs/presentation/GitLab_AI_Documentation_Engine.pptx](docs/presentation/GitLab_AI_Documentation_Engine.pptx) |
+| 📐 Architecture notes | [docs/architecture.md](docs/architecture.md) |
+| 🔄 Workflow states | [docs/workflow_states.md](docs/workflow_states.md) |
+| 🖼️ Screenshots | [docs/screenshots](docs/screenshots) |
+
+> The backend runs on Render's free plan and sleeps after ~15 minutes of inactivity. If the app is slow to respond, open the health check link once and wait about a minute.
 
 ### Frontend Application
 
@@ -22,7 +37,7 @@ https://gitlab-ai-docs-engine.vercel.app/login
 
 ###  Backend API
 
-https://content-engine-backend-7hal.onrender.com/
+https://content-engine-backend-7hal.onrender.com
 
 ###  FastAPI Swagger Documentation
 
@@ -38,7 +53,8 @@ https://content-engine-backend-7hal.onrender.com/openapi.json
 - Backend: Render
 - API: FastAPI
 - Authentication: Firebase Authentication
-- Database: SQLite locally / PostgreSQL or Supabase in deployed environments
+- Database: SQLite locally / PostgreSQL (Render Postgres) in production
+- AI model: Google Gemini (`gemini-flash-latest`) via an OpenAI-compatible endpoint
 
 ---
 
@@ -368,7 +384,17 @@ AI_TIMEOUT_SECONDS=120
 
 > Never commit real API keys to GitHub.
 
-For Gemini or another OpenAI-compatible provider, configure the corresponding provider endpoint and model according to the provider's API requirements.
+For Google Gemini (used in our deployment), use Gemini's OpenAI-compatible endpoint:
+
+```env
+AI_PROVIDER=openai_compatible
+OPENAI_API_KEY=your_gemini_api_key
+OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+OPENAI_MODEL=gemini-flash-latest
+AI_TIMEOUT_SECONDS=120
+```
+
+Get a key at https://aistudio.google.com/apikey. If a model name returns 404 for your key, list the models your key can use and pick an available `flash` model.
 
 ---
 
@@ -429,7 +455,7 @@ https://content-engine-backend-7hal.onrender.com/docs
 
 **OpenAPI**
 
-https://generativelanguage.googleapis.com/v1beta/openai/ 
+https://content-engine-backend-7hal.onrender.com/openapi.json
 
 ---
 
@@ -588,8 +614,8 @@ gitlab-ai-content-engine/
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/DhamodharThyiagarajan/gitlab-ai-content-engine.git
-cd gitlab-ai-content-engine
+git clone https://github.com/Ankush25-anku/gitlab-ai-documentation-engine-GenAi.git
+cd gitlab-ai-documentation-engine-GenAi
 ```
 
 ---
@@ -602,7 +628,9 @@ Open a terminal:
 cd backend
 ```
 
-Create a virtual environment:
+Create a virtual environment.
+
+> **Use Python 3.10–3.13 (3.12 recommended).** CrewAI does not support Python 3.14 yet. On Windows with several Python versions installed, use `py -3.12 -m venv .venv`.
 
 ### Windows
 
@@ -794,14 +822,16 @@ The frontend is deployed using Vercel.
 Production URL:
 
 ```text
-https://gitlab-ai-content-engine-nu.vercel.app/login
+https://gitlab-ai-docs-engine.vercel.app/login
 ```
 
-The frontend should be configured to use the deployed backend:
+The frontend is configured (in Vercel → Settings → Environment Variables) to use the deployed backend:
 
 ```env
-NEXT_PUBLIC_BACKEND_URL=https://gitlab-ai-content-engine-api.onrender.com
+NEXT_PUBLIC_BACKEND_URL=https://content-engine-backend-7hal.onrender.com
 ```
+
+The Vercel domain is also added to Firebase → Authentication → Settings → Authorized domains.
 
 ---
 
@@ -812,16 +842,26 @@ The FastAPI backend is deployed using Render.
 Production API:
 
 ```text
-https://gitlab-ai-content-engine-api.onrender.com
+https://content-engine-backend-7hal.onrender.com
 ```
 
 Swagger:
 
 ```text
-https://gitlab-ai-content-engine-api.onrender.com/docs
+https://content-engine-backend-7hal.onrender.com/docs
 ```
 
-The backend must be configured with the appropriate production environment variables, Firebase credentials, database connection, and AI provider configuration.
+Render settings used:
+
+- Root directory: `backend`
+- Build command: `pip install -r requirements.txt`
+- Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- Python version: pinned to 3.12 by `backend/.python-version`
+- `DATABASE_URL`: the Render Postgres **internal** URL with the `postgresql+psycopg://` prefix
+- `FIREBASE_SERVICE_ACCOUNT_PATH=/etc/secrets/firebase-key.json` (uploaded as a Render secret file, never committed)
+- `CORS_ORIGINS` / `FRONTEND_URL`: the Vercel URL
+
+All secrets (database URL, Gemini key, JWT secret, Firebase service account) live only in Render/Vercel environment settings.
 
 ---
 
@@ -1077,26 +1117,12 @@ Export / Publish
 This project was developed collaboratively by:
 
 | Contributor | Role / Contribution |
+|---|---|
+| Ankush | Frontend |
+| Tina | Backend and API, AI agents and retrieval |
+| Aditya | AI agents |
+| Pruthvi | Architecture and database |
+| Nitant | Deployment |
+| Vrushabh | QA and testing |
 
-
-| ANKUSH | FRONTEND |
-
-
-| TINA   | BACKEND AND API , AI AGENTS AND RETRIEVAL|
-
-
-| ADITYA |  AI AGENTS |
-
-
-| PRUTHVI | ARCHITECTURE AND DATABASE |
-
-
-| NITANT | DEPLOYMENT  |
-
-
-| VRUSHABH | QA AND TESTING|
-
-
-All contributors participated collaboratively in the development, testing, documentation, and refinement of the project
-And also performed Qulity Assurance And different type of testing to make sure that our AI workflow, APIs, document 
-processing pipeline and overall (0:10) system are working correctly
+All contributors participated collaboratively in the development, testing, documentation, and refinement of the project. The team also performed quality assurance and different types of testing to make sure that the AI workflow, APIs, document processing pipeline and overall system work correctly.
