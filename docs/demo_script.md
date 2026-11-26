@@ -29,7 +29,7 @@ The project demonstration is organized into seven sections, highlighting the app
 - Describe how the backend API layer communicates with the AI workflow.
 
 
-## 3. AI Agent Architecture (9–13 minutes)
+## 3. AI Agent Architecture (10–14 minutes)
 
 **Focus:** Exploring individual agent roles and workflow coordination.
 
@@ -41,7 +41,7 @@ The project demonstration is organized into seven sections, highlighting the app
 - Explain how outputs and contextual information from earlier tasks can be utilized by subsequent agents.
 
 
-## 4. AI Workflow (14-19 minutes)
+## 4. AI Workflow (15-20 minutes)
 
 **Focus:** Understanding the multi-stage AI content-generation process.
 
@@ -53,7 +53,7 @@ The project demonstration is organized into seven sections, highlighting the app
 - Illustrate how all five specialized agents operate sequentially to generate the final documentation.
 
 
-## 5. Application Workflow and Output (13–16 minutes)
+## 5. Application Workflow and Output (21-25 minutes)
 
 **Focus:** Understanding input processing and documentation generation.
 
@@ -63,7 +63,7 @@ The project demonstration is organized into seven sections, highlighting the app
 - Display the generated documentation and explain its structure.
 - Explain how the final processing stage prepares the content for publishing.
 
-## 5. Testing and API Testing (16–21 minutes)
+## 5. Testing and API Testing (25-27 minutes)
 
 **Focus:** Evaluating application functionality and API reliability.
 
@@ -74,7 +74,7 @@ The project demonstration is organized into seven sections, highlighting the app
 - Demonstrate API testing using the project's existing testing files or tools.
 - Explain how API responses and expected application behavior are verified.
 
-## 6. Architecture and Workflow Documentation (21–24 minutes)
+## 6. Architecture and Workflow Documentation (28-30 minutes)
 
 **Focus:** Understanding the system design and its technical documentation.
 
@@ -84,7 +84,7 @@ The project demonstration is organized into seven sections, highlighting the app
 - Highlight how structured technical documentation helps developers understand, maintain, and extend the application.
 - Present `docs/demo_script.md` and explain its role in organizing the project demonstration.
 
-## 7. Conclusion and Future Enhancements (24–27 minutes)
+## 7. Conclusion and Future Enhancements (30-35 minutes)
 
 **Focus:** Summarizing project capabilities and identifying potential improvements.
 
