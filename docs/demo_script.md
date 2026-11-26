@@ -1,87 +1,107 @@
+
 # Demo Script — GitLab AI Content Engine
 
-The demonstration is divided into seven parts, covering the main project components, AI workflow, testing, and documentation.
+The project demonstration is organized into seven sections, highlighting the application's core components, AI-driven workflow, testing process, and technical documentation.
 
-## AI Workflow (0–5 minutes)
 
-**Focus:** Multi-stage AI content-generation workflow.
 
-* Introduce the purpose of the AI workflow.
-* Explain how the workflow receives task inputs and uses the configured language model.
-* Demonstrate the Context Reader and explain its role in extracting source-grounded information.
-* Explain the Documentation Writer and Technical Reviewer.
-* Describe the Tone Optimizer and Publishing Coordinator.
-* Show how the five specialized agents work sequentially to prepare the final content.
+## 1. Frontend and User Interface (0–4 minutes)
 
-## Backend and API (5–9 minutes)
+**Focus:** Introducing the application interface and demonstrating the user experience.
 
-**Focus:** Backend implementation and API integration.
+- Introduce the frontend architecture and its role in the GitLab AI Content Engine.
+- Walk through the main application dashboard and its key components.
+- Demonstrate how users provide inputs, upload source documents, and initiate the documentation-generation process.
+- Explain how the frontend communicates with the backend through API endpoints.
+- Demonstrate how generated documentation is displayed in the user interface.
+- Highlight the review, editing, and output features available to users, based on the actual implementation.
+- Explain how the frontend provides an interface for interacting with the AI-powered documentation workflow.
 
-* Explain the role of the backend in the application.
-* Show the relevant API implementation in `backend/app/api/reviews.py`.
-* Explain how the application handles review-related operations, based on the actual implementation.
-* Demonstrate a real API request and response, if available.
-* Explain how the API layer interacts with the AI workflow.
 
-## AI Agent Architecture (9–13 minutes)
+## 2. Backend and API (5–9 minutes)
 
-**Focus:** Agent responsibilities and task coordination.
+**Focus:** Understanding backend functionality and API integration.
 
-* Open `backend/ai/agents/crew.py`.
-* Explain the `build_crew` function.
-* Introduce the five agents: Context Reader, Documentation Writer, Technical Reviewer, Tone Optimizer, and Publishing Coordinator.
-* Explain how each agent has a specific role and goal.
-* Demonstrate how tasks are organized using `Process.sequential`.
-* Explain how context from previous tasks can be passed to subsequent tasks.
+- Introduce the backend architecture and its role in the application.
+- Navigate to the API implementation in `backend/app/api/reviews.py`.
+- Explain how review-related operations are managed according to the existing implementation.
+- Demonstrate an actual API request and its corresponding response, if available.
+- Describe how the backend API layer communicates with the AI workflow.
 
-## Application Workflow and Output (13–16 minutes)
 
-**Focus:** Processing task inputs and generating content.
+## 3. AI Agent Architecture (9–13 minutes)
 
-* Show how the application invokes the AI workflow in `backend/ai/workflow.py`.
-* Explain how task inputs are passed into the workflow.
-* Demonstrate the actual workflow using a prepared sample input.
-* Show the generated output and explain its structure.
-* Explain how the final stage prepares the content for output.
+**Focus:** Exploring individual agent roles and workflow coordination.
 
-## Testing and API Testing (16–21 minutes)
+- Open `backend/ai/agents/crew.py`.
+- Explain the purpose and functionality of the `build_crew` function.
+- Introduce the five specialized agents: Context Reader, Documentation Writer, Technical Reviewer, Tone Optimizer, and Publishing Coordinator.
+- Discuss the individual responsibilities and objectives assigned to each agent.
+- Demonstrate how tasks are coordinated through `Process.sequential`.
+- Explain how outputs and contextual information from earlier tasks can be utilized by subsequent agents.
 
-**Focus:** Validating application behavior and API functionality.
 
-* Explain the purpose of automated testing.
-* Show `tests/ai_output_tests/test_ai_workflow.py`.
-* Demonstrate relevant test cases and expected-agent or output checks.
-* Show the actual test results confirming that 25 out of 25 tests passed.
-* Demonstrate API testing using the project's actual API testing file or tool.
-* Explain how the team checks responses and validates expected behavior.
+## 4. AI Workflow (14-19 minutes)
 
-## Architecture and Workflow Documentation (21–24 minutes)
+**Focus:** Understanding the multi-stage AI content-generation process.
 
-**Focus:** Explaining and documenting the project design.
+- Introduce the objective and purpose of the AI workflow.
+- Explain how task inputs are received and processed using the configured language model.
+- Demonstrate the Context Reader and its role in extracting information grounded in source documents.
+- Introduce the Documentation Writer and Technical Reviewer and explain their responsibilities.
+- Describe how the Tone Optimizer and Publishing Coordinator refine and prepare the content.
+- Illustrate how all five specialized agents operate sequentially to generate the final documentation.
 
-* Open `docs/architecture.md`.
-* Explain the architecture diagram and the main project components.
-* Describe the sequential AI workflow and the responsibilities of the five agents.
-* Explain how technical documentation helps developers understand and maintain the project.
-* Show the `docs/demo_script.md` file and explain how it supports the project demonstration.
 
-## Conclusion and Future Enhancements (24–27 minutes)
+## 5. Application Workflow and Output (13–16 minutes)
 
-**Focus:** Project summary and possible improvements.
+**Focus:** Understanding input processing and documentation generation.
 
-* Summarize the purpose of the GitLab AI Content Engine.
-* Highlight the benefits of using five specialized AI agents.
-* Explain the importance of source-grounded content, review, and testing.
-* Summarize the testing results.
-* Discuss possible future enhancements, such as improved workflow monitoring, prompt version management, stronger validation, and additional integrations where appropriate.
-* Thank the audience and invite feedback.
+- Navigate to `backend/ai/workflow.py` and explain how the application triggers the AI workflow.
+- Describe how input parameters and task-related information are supplied to the workflow.
+- Run the workflow using a prepared sample input.
+- Display the generated documentation and explain its structure.
+- Explain how the final processing stage prepares the content for publishing.
+
+## 5. Testing and API Testing (16–21 minutes)
+
+**Focus:** Evaluating application functionality and API reliability.
+
+- Introduce the importance of automated testing in validating application behavior.
+- Open `tests/ai_output_tests/test_ai_workflow.py`.
+- Walk through relevant test cases, including agent-level and output-validation checks.
+- Display the actual test execution results showing 25 out of 25 tests passed.
+- Demonstrate API testing using the project's existing testing files or tools.
+- Explain how API responses and expected application behavior are verified.
+
+## 6. Architecture and Workflow Documentation (21–24 minutes)
+
+**Focus:** Understanding the system design and its technical documentation.
+
+- Open `docs/architecture.md`.
+- Walk through the architecture diagram and explain the major application components.
+- Describe the sequential AI pipeline and the functions performed by the five specialized agents.
+- Highlight how structured technical documentation helps developers understand, maintain, and extend the application.
+- Present `docs/demo_script.md` and explain its role in organizing the project demonstration.
+
+## 7. Conclusion and Future Enhancements (24–27 minutes)
+
+**Focus:** Summarizing project capabilities and identifying potential improvements.
+
+- Recap the overall objective and functionality of the GitLab AI Content Engine.
+- Highlight the advantages of coordinating five specialized AI agents.
+- Emphasize the importance of source-grounded generation, technical review, and automated testing.
+- Present the final testing summary and key outcomes.
+- Discuss potential future improvements, including enhanced workflow monitoring, prompt version control, stronger validation mechanisms, and additional integrations where applicable.
+- Conclude the presentation by thanking the audience and inviting questions or feedback.
 
 ---
 
 ## Presenter Notes
 
-* Demonstrate only features that are implemented in the current project.
-* Use the actual sample input, commands, and API requests from the repository.
-* Show the real test output when reporting the 25/25 result.
-* Do not expose API keys, `.env` values, or other sensitive information.
-* Adjust the timing according to the number of presenters and the actual demonstration.
+- Present only the functionalities currently implemented in the application.
+- Refer to actual sample inputs, execution commands, and API requests available in the project repository.
+- Verify and display the actual test execution output before mentioning the 25/25 result.
+- Ensure that API keys, `.env` configurations, and other confidential information remain protected.
+- Modify the demonstration timings based on the number of presenters and the actual project walkthrough.
+
