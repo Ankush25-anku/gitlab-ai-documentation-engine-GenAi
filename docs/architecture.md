@@ -4,9 +4,9 @@
 
 ## 1. Project Overview
 
-The GitLab AI Content Engine is an AI-powered application designed to generate accurate, source-grounded technical documentation using Large Language Models (LLMs) and a sequential multi-agent workflow.
+The GitLab AI Content Engine is an AI-driven application that automates the creation of reliable, source-based technical documentation using Large Language Models (LLMs) and a structured multi-agent pipeline.
 
-The application uses specialized AI agents to analyze context, write documentation, review technical accuracy, improve readability, and prepare the final customer-facing Markdown output.
+It leverages specialized AI agents to interpret context, generate documentation, validate technical correctness, refine clarity and readability, and produce polished, customer-ready Markdown documentation.
 
 ## 2. Technology Stack
 
@@ -131,4 +131,4 @@ The test results demonstrate that the reported test cases passed. Actual coverag
 
 ## 9. Conclusion
 
-The GitLab AI Content Engine combines a configured language model with five specialized CrewAI agents to generate and refine technical documentation. Its sequential workflow separates context extraction, writing, technical review, tone optimization, and publishing. API documentation and testing tools support endpoint discovery and validation where configured.
+The GitLab AI Content Engine integrates a configured language model with five dedicated CrewAI agents to create, review, and enhance technical documentation. Its sequential workflow handles context extraction, content generation, technical validation, tone refinement, and final publishing. API documentation and testing tools are also incorporated to support endpoint identification and validation when configured.
