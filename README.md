@@ -27,7 +27,6 @@ The platform combines document ingestion, source/context normalization, a multi-
 | 📊 Presentation (PowerPoint) | [docs/presentation/GitLab_AI_Documentation_Engine.pptx](docs/presentation/GitLab_AI_Documentation_Engine.pptx) |
 | 📐 Architecture notes | [docs/architecture.md](docs/architecture.md) |
 | 🔄 Workflow states | [docs/workflow_states.md](docs/workflow_states.md) |
-| 🖼️ Screenshots | [docs/screenshots](docs/screenshots) |
 
 > The backend runs on Render's free plan and sleeps after ~15 minutes of inactivity. If the app is slow to respond, open the health check link once and wait about a minute.
 
