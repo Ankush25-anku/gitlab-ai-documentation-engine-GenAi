@@ -61,19 +61,53 @@ ready_for_human_review
                    ready_for_human_review
 ```
 
-# Workflow Notes
-- The uploaded document is the primary source of truth for the AI workflow.
-- During reading, the Context Reader extracts relevant technical context from the uploaded document.
-- The Context Reader can also retrieve supporting information from Chroma, such as style guides, sample documentation, and content templates.
-- Chroma provides supporting context and does not replace the uploaded source.
-- During writing, the Documentation Writer uses the verified context to generate the initial documentation draft.
-- During fact_checking, the Fact Checker verifies generated claims against the uploaded source and identifies unsupported or incorrect information.
-- During tone_editing, the Tone Editor improves clarity, structure, and audience-appropriate tone while preserving verified technical information.
-- ready_for_human_review is a mandatory human checkpoint. Content is not published automatically after the AI workflow.
-- If the reviewer approves the draft, the workflow moves to approved and then publishing.
-- If the reviewer requests changes, the workflow moves to revision_requested, and the feedback is sent back to the Documentation Writer.
-- After revision, the content goes through Writer → Fact Checker → Tone Editor → Human Review again.
-- Previous versions can be retained so that revisions and review decisions remain traceable.
-- The Publishing Coordinator prepares approved documentation as a Markdown export.
-- published is the final state in the current MVP.
-- failed represents an AI or system execution error and is separate from a human-requested revision.
+
+# Workflow Notes — GitLab AI Content Engine
+
+## Source Document and Context Retrieval
+
+- The uploaded document serves as the primary source of truth for the AI documentation workflow.
+- During the reading stage, the Context Reader extracts relevant technical information from the uploaded source.
+- The Context Reader can also retrieve supplementary information from ChromaDB, including style guides, sample documentation, and content templates.
+- ChromaDB provides additional supporting context but does not replace or override the uploaded source document.
+
+## AI Documentation Generation and Validation
+
+- During the writing stage, the Documentation Writer uses the extracted and verified context to generate the initial documentation draft.
+- During the `fact_checking` stage, the Fact Checker validates generated claims against the uploaded source and identifies unsupported or inaccurate information.
+- During the `tone_editing` stage, the Tone Editor enhances clarity, structure, and audience-appropriate language while preserving verified technical details.
+
+## Human Review and Revision Process
+
+- `ready_for_human_review` acts as a mandatory human approval checkpoint before publishing.
+- Documentation is not published automatically after the AI workflow is completed.
+- If the reviewer approves the draft, the workflow transitions to `approved`, followed by the publishing stage.
+- If changes are requested, the workflow transitions to `revision_requested`, and reviewer feedback is passed back to the Documentation Writer.
+- After revisions, the documentation follows the complete review cycle again:
+
+  **Documentation Writer → Fact Checker → Tone Editor → Human Review**
+
+- Previous document versions can be retained to maintain traceability of revisions, feedback, and review decisions.
+
+## Publishing and Workflow States
+
+- The Publishing Coordinator prepares approved documentation for export in Markdown format.
+- `published` represents the final workflow state in the current MVP.
+- `failed` represents an AI execution or system-level error and is handled separately from revisions requested by a human reviewer.
+
+---
+
+## Workflow Summary
+
+The application follows a source-grounded, human-in-the-loop documentation process in which AI agents generate, validate, and refine technical content before it reaches the publishing stage.
+
+**Overall Flow:**
+
+`Uploaded Source → Context Reader → Documentation Writer → Fact Checker → Tone Editor → Human Review → Approval → Publishing Coordinator → Markdown Export`
+
+**Revision Flow:**
+
+`Human Review → Revision Requested → Documentation Writer → Fact Checker → Tone Editor → Human Review`
+
+**Important:** Human approval is mandatory before publishing, ensuring that the final documentation remains accurate, traceable, and aligned with the original source.
+
