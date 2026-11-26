@@ -75,6 +75,34 @@ Instead of directly sending raw project information to an AI model, the system p
 
 ---
 
+# Business Problem & Product Goal
+
+## Business problem
+
+Engineering and product teams ship changes every week, and each release needs release notes, API documentation, onboarding guides and internal updates. Today this is written by hand, which is:
+
+- **Slow:** engineers spend hours turning raw notes and specs into readable documents.
+- **Error-prone:** facts are copied wrongly, changes are missed and claims drift from what actually shipped.
+- **Untraceable:** there is no record of where a statement came from, who reviewed it or who approved it.
+- **Risky with plain AI:** a single-prompt chatbot can hallucinate, so its output cannot be published without checks.
+
+**Business function:** internal productivity and developer documentation (technical writing, release communication, developer relations).
+
+## Product goal
+
+Turn source material (release notes, specs, technical documents) into **review-ready, source-grounded documentation**, where every fact can be traced to its source and nothing is published without a human decision.
+
+| | |
+|---|---|
+| **Target users** | Technical writers, engineers, product managers, reviewers and approvers in a documentation team |
+| **Inputs** | Uploaded PDF, DOCX, TXT, Markdown or CSV files, or pasted raw text, plus metadata (title, content type, audience, product area, channel) |
+| **Core workflow** | Extract text with source markers → retrieve relevant context → 5-agent AI workflow → automatic technical review and quality score → human review / revision → approval → publish |
+| **Expected output** | A customer-facing Markdown document with a quality score, supported facts with source references, context gaps, unsupported claims and risks |
+| **Success criteria** | Draft generated end-to-end from a real document; every fact backed by a source reference; unsupported claims flagged before publishing; only approved drafts can be exported; roles enforced on the backend |
+| **Key constraints** | No hallucinated facts; secrets never in code; works on free-tier hosting; human approval required before publishing |
+
+---
+
 # Key Features
 
 ## AI-Assisted Documentation
@@ -230,6 +258,32 @@ PDF source markers can preserve the original filename and page number.
 
 ---
 
+#  Data Sources & Sample Inputs
+
+| Source | How it is used |
+|---|---|
+| Uploaded documents (PDF, DOCX, TXT, MD, CSV) | Main input. Text is extracted with `pypdf`, `python-docx` and the `csv` module (`backend/app/services/document_extractor.py`) |
+| Pasted raw text | Alternative input when no file is uploaded |
+| Job metadata (title, content type, audience, product area, channel) | Steers the agents' tone and focus, and builds the retrieval query |
+| ChromaDB knowledge base | Source chunks stored per job and retrieved as context (`backend/ai/retrieval/knowledge_base.py`) |
+| Review history | Reviewer comments feed the refine step that produces the next draft version |
+| PostgreSQL / SQLite | Users, roles, content jobs, drafts, review decisions and audit events |
+
+**Source markers.** Every extracted chunk is tagged, for example `[SOURCE: release_notes.pdf | PAGE 1]`, so that the agents can cite where each fact came from and reviewers can check it.
+
+**Sample inputs** for testing and demos are in [`data/sample_inputs/`](data/sample_inputs):
+
+| File | Type | Good for testing |
+|---|---|---|
+| `01_trailmark_field_guide.pdf` | Product guide | User-facing documentation |
+| `02_civicroute_api_reference.pdf` | API reference | API documentation |
+| `03_greenledger_release_brief.pdf` | Release brief | Release notes |
+| `04_kilnstock_product_evidence.pdf` | Product evidence | Fact-checking and unsupported-claim detection |
+| `05_orbitcare_release_dossier.pdf` | Longer release dossier | Larger, multi-page input |
+| `06_lantern_library_update.txt` | Plain text | Quick text-only test |
+
+---
+
 #  System Architecture
 
 ```text
@@ -347,6 +401,41 @@ flowchart TD
     style N6 fill:#162032,stroke:#334155,stroke-width:1px,color:#CBD5E1
 ```
 
+
+---
+
+#  Prompt Strategy, Guardrails & Validation
+
+**Prompt strategy.** Instead of one large prompt, the work is split across five CrewAI agents that run in sequence (`backend/ai/agents/crew.py`). Each agent has a narrow role and goal, and its task instructions are defined in `backend/ai/workflow.py`. Every agent receives all earlier agents' outputs as context.
+
+| Agent | Instruction (summary) | Output format |
+|---|---|---|
+| Context Reader | Extract only source-grounded facts, gaps, contradictions and source references | Structured JSON |
+| Documentation Writer | Write original Markdown for the audience using only supported facts; never copy the source | Markdown |
+| Technical Reviewer | Compare the draft against the evidence | JSON: verdict (PASS / NEEDS_REVIEW), risks, unsupported claims, missing information, supported sections |
+| Tone Optimizer | Improve clarity and structure using the review findings, without adding facts | Markdown |
+| Publishing Coordinator | Prepare the final customer-facing document, omitting internal review data | Markdown |
+
+**Guardrails and validation**
+
+- **Grounding:** agents are instructed to use only facts from the source evidence, and every fact keeps its source reference.
+- **Structured outputs:** evidence and review are returned as JSON and parsed defensively; invalid JSON falls back safely instead of crashing.
+- **Quality score (0–100):** starts at 100, then −15 per unsupported claim (max −40), −10 per technical risk (max −30) and −3 per context gap (max −20). If no structured review is available, the score is capped at 70 and a risk is added.
+- **Human-in-the-loop:** every draft is marked `human_approval_required`; only approver or admin roles can publish, and only approved drafts can be exported.
+- **Input validation:** unsupported file types, empty files and scanned (image-only) PDFs are rejected with clear messages; job titles and source text have minimum lengths.
+- **Safe rendering:** AI Markdown is rendered as React elements (no raw HTML), which prevents script injection in the browser.
+- **Error handling:** AI provider failures are reported as "AI workflow failed…", and mock mode (`AI_PROVIDER=mock`) keeps the full flow testable without an API key.
+
+## Architecture decisions & trade-offs
+
+| Decision | Why | Trade-off |
+|---|---|---|
+| Multi-agent pipeline instead of one prompt | Each step is simpler and more reliable, and it produces structured evidence and review data | More LLM calls per run, so it is slower and more expensive |
+| Human approval before publishing | AI can still make mistakes; a person owns the final decision | Adds a manual step |
+| Local hash embeddings in ChromaDB | No external embedding service or extra API cost; retrieval is scoped per job | Less semantic than model-based embeddings |
+| OpenAI-compatible provider layer | Swap Gemini, OpenAI or mock through environment variables only | Provider-specific features are not used |
+| Firebase Authentication | Secure, managed sign-in; the backend verifies every token | Depends on a third-party service |
+| Free-tier hosting (Vercel, Render) | Zero cost for the capstone | Backend sleeps when idle; uploaded files are not kept on restart |
 
 ---
 
@@ -519,43 +608,43 @@ This provides an additional quality-control layer between AI generation and publ
 #  Project Structure
 
 ```text
-gitlab-ai-content-engine/
+gitlab-ai-documentation-engine-GenAi/
 │
 ├── backend/
 │   ├── ai/
-│   │   ├── agents/
-│   │   ├── prompts/
-│   │   ├── retrieval/
-│   │   └── evaluation/
-│   │
+│   │   ├── agents/              # 5 CrewAI agents + crew.py (roles, goals, sequential crew)
+│   │   ├── retrieval/           # ChromaDB knowledge base (job-scoped retrieval)
+│   │   ├── schemas/             # Context / evidence schemas
+│   │   ├── common.py            # Output cleaning and source-reference helpers
+│   │   └── workflow.py          # Agent task prompts, scoring and result packaging
 │   ├── app/
-│   │   ├── api/
-│   │   ├── auth/
-│   │   ├── db/
-│   │   ├── models/
-│   │   └── services/
-│   │
-│   ├── requirements.txt
-│   └── ...
+│   │   ├── api/                 # auth, content_jobs, reviews, publishing, metrics routes
+│   │   ├── auth/                # Firebase token verification + role checks
+│   │   ├── db/                  # SQLAlchemy session (SQLite / PostgreSQL)
+│   │   ├── models/              # users, content_jobs, drafts, reviews, audit_events
+│   │   ├── services/            # AI provider (Gemini / OpenAI-compatible / mock), document extractor
+│   │   ├── config.py
+│   │   └── main.py
+│   ├── .python-version          # Pins Python 3.12 for deployment
+│   └── requirements.txt
 │
 ├── frontend/
-│   ├── app/
-│   ├── components/
-│   └── ...
+│   └── src/
+│       ├── app/                 # Next.js pages: login, signup, dashboard, create-content,
+│       │                        # my-jobs, review, analytics, settings
+│       ├── components/          # layout, auth panel, UI (command palette, theme, toasts)
+│       ├── hooks/useAuth.js     # Auth context (user, role, token)
+│       └── lib/                 # backend URL, Firebase user helpers, theme
 │
-├── data/
-│   └── sample_inputs/
-│
-├── deployment/
-│
-├── docs/
-│   ├── architecture.md
-│   ├── workflow_states.md
-│   └── demo_script.md
-│
-├── .env.example
+├── data/sample_inputs/          # Sample documents for testing and demos
+├── tests/                       # 25 functional, security, edge-case and AI tests
+├── docs/                        # Architecture, workflow states, demo script,
+│   ├── presentation/            # project presentation (PowerPoint)
+│   └── screenshots/
+├── deployment/                  # Deployment notes
+├── tools/                       # Helper: create a read-only database user
+├── .env.example                 # All environment variables (no real secrets)
 ├── docker-compose.yml
-├── package.json
 └── README.md
 ```
 
@@ -990,6 +1079,62 @@ The project is designed to demonstrate how an AI-assisted documentation platform
 - Controlled publishing
 - Full-stack web development
 - Cloud deployment
+
+---
+
+#  Evaluation & Reliability
+
+## What "good performance" means
+
+- The draft contains **only facts supported by the source**, each with a source reference.
+- Unsupported claims and gaps are **flagged before** a human approves.
+- The full workflow (upload → AI → review → revision → approve → publish) **completes end-to-end** on the deployed app.
+- **Roles are enforced** on the backend, not only in the UI.
+
+## Automated tests (25 tests)
+
+Located in [`tests/`](tests):
+
+| Folder | What it checks |
+|---|---|
+| `functional_tests/` | Health and readiness endpoints, metrics (empty database, real jobs, writer filtering, monthly trend), exporting approved, unapproved and missing drafts |
+| `security_tests/` | Endpoints reject unauthenticated requests; role checks allow writers and admins where expected and reject writers from reviewer- and admin-only endpoints |
+| `edge_cases/` | Rejects too-short titles and source text, accepts minimum valid input, handles special characters in export titles |
+| `ai_output_tests/` | Mock AI provider generation; the workflow defines all five agents and uses CrewAI |
+
+Run them from the repository root (with the backend virtual environment active):
+
+```powershell
+pip install pytest
+$env:PYTHONPATH = "backend"     # macOS/Linux: export PYTHONPATH=backend
+pytest tests
+```
+
+## Manual end-to-end evaluation (live deployment)
+
+Tested on the deployed app (Vercel + Render + PostgreSQL + Gemini) with a release-notes PDF:
+
+| Check | Result |
+|---|---|
+| Workflow completion | All five agents completed; draft generated |
+| Quality score | 100 / 100, verdict PASS |
+| Groundedness | 4 supported facts with source references (file + page) |
+| Hallucination detection | The reviewer still flagged 3 unsupported claims (statements not in the source) for human review |
+| Revision loop | Reviewer comment produced Version 2 of the draft |
+| Approval and publishing | Approved draft published and exported as Markdown |
+| Access control | A writer trying to approve received 403 "Insufficient permissions" |
+| Source grounding with a mismatched title | With a title not related to the document, the AI reported that the source had no information on it instead of inventing content |
+
+## Known limitations
+
+- The AI workflow runs synchronously; there is no live per-agent progress yet.
+- AI provider outages (HTTP 503 or 429) are not retried automatically; the user retries manually.
+- Only the first 8,000 characters of a source are sent to the Context Reader, so very long documents are truncated.
+- Retrieval uses simple hash embeddings rather than semantic embedding models.
+- Scanned (image-only) PDFs need OCR, which is not built in.
+- On Render's free plan the backend sleeps when idle (first request takes up to a minute) and uploaded files are not kept after a restart; jobs and drafts are kept in PostgreSQL.
+- The Markdown viewer does not render tables.
+- Some UI controls (content templates, the "From Existing" tab) are placeholders for future features.
 
 ---
 
